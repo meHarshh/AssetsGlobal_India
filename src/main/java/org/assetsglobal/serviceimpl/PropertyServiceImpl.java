@@ -1,0 +1,151 @@
+package org.assetsglobal.serviceimpl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.assetsglobal.dto.PropertyRequest;
+import org.assetsglobal.dto.PropertyResponse;
+import org.assetsglobal.dto.SearchFilter;
+import org.assetsglobal.entity.Property;
+import org.assetsglobal.repository.PropertyRepository;
+import org.assetsglobal.service.PropertyService;
+import org.assetsglobal.utility.ResponseStructure;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PropertyServiceImpl implements PropertyService {
+
+	@Autowired
+	private PropertyRepository propertyRepository;
+
+	@Autowired
+	private PropertySpecification propertySpecification;
+
+	@Autowired
+	private ResponseStructure<PropertyResponse> responseStructure;
+
+	@Autowired
+	private ResponseStructure<List<PropertyResponse>> structure;
+
+//	This method is to add the property to our database based on the seller that adds their property to the db
+	@Override
+	public ResponseEntity<ResponseStructure<PropertyResponse>> addProperty(PropertyRequest propertyRequest) {
+
+		Property property = propertyRepository.save(mapToProperty(propertyRequest));
+		PropertyResponse propertyResponse = mapToResponse(property);
+
+		return ResponseEntity.ok(responseStructure.setData(propertyResponse).setMessage("Data saved in the db")
+				.setStatusCode(HttpStatus.OK.value()));
+	}
+
+//	This method is used to filter the property based on the filter provided by the user
+	@SuppressWarnings("rawtypes")
+	@Override
+	public ResponseEntity<ResponseStructure<List<PropertyResponse>>> findByFilter(SearchFilter searchFilter) {
+		List<Property> filteredProperties = propertyRepository
+				.findAll(propertySpecification.buildSpecification(searchFilter));
+		@SuppressWarnings("unchecked")
+		List<PropertyResponse> filteredResponses = new ArrayList();
+		for (Property property : filteredProperties) {
+			filteredResponses.add(mapToResponse(property));
+		}
+		if ((filteredResponses.size() != 0))
+			return ResponseEntity.ok(structure.setData(filteredResponses)
+					.setMessage("The list of the property is mentioned below").setStatusCode(HttpStatus.OK.value()));
+
+		else
+			return ResponseEntity
+					.ok(structure.setData(null).setMessage("No properties with the filters , try something else")
+							.setStatusCode(HttpStatus.OK.value()));
+	}
+
+//	This is the mapper method which is used to map the entity back to the response
+	private PropertyResponse mapToResponse(Property property) {
+
+		PropertyResponse propertyResponse = new PropertyResponse();
+		propertyResponse.setPropertyId(property.getPropertyId());
+		propertyResponse.setNameOfTheProperty(property.getNameOfTheProperty());
+		propertyResponse.setPropertyLocation(property.getPropertyLocation());
+		propertyResponse.setPropertyPurpose(property.getPropertyPurpose());
+		propertyResponse.setDeveloper(property.getDeveloper());
+		propertyResponse.setConfiguration(property.getConfiguration());
+		propertyResponse.setPurchseType(property.getPurchseType());
+		propertyResponse.setPossesion(property.getPossesion());
+		propertyResponse.setListedBy(property.getListedBy());
+		propertyResponse.setAgeOfProperty(property.getAgeOfProperty());
+		propertyResponse.setArea(property.getArea());
+		propertyResponse.setPriceRange(property.getPriceRange());
+		propertyResponse.setPrice(property.getPrice());
+		propertyResponse.setConstructionStatus(property.getConstructionStatus());
+		propertyResponse.setPropertyType(property.getPropertyType());
+		propertyResponse.setNumberOfFloors(property.getNumberOfFloors());
+
+		return propertyResponse;
+
+	}
+
+//	This is the mapper method which is used to map the property request taken from the user to convert to the entity type
+	private Property mapToProperty(PropertyRequest propertyRequest) {
+		Property property = new Property();
+		property.setAgeOfProperty(propertyRequest.getAgeOfProperty());
+		property.setArea(propertyRequest.getArea());
+		property.setConfiguration(propertyRequest.getConfiguration());
+		property.setConstructionStatus(propertyRequest.getConstructionStatus());
+		property.setDeveloper(propertyRequest.getDeveloper());
+		property.setListedBy(propertyRequest.getListedBy());
+		property.setNameOfTheProperty(propertyRequest.getNameOfTheProperty());
+		property.setNumberOfFloors(propertyRequest.getNumberOfFloors());
+		property.setPossesion(propertyRequest.getPossesion());
+		property.setPrice(propertyRequest.getPrice());
+		property.setPriceRange(propertyRequest.getPriceRange());
+		property.setPropertyLocation(propertyRequest.getPropertyLocation());
+		property.setPropertyPurpose(propertyRequest.getPropertyPurpose());
+		property.setPropertyType(propertyRequest.getPropertyType());
+		property.setPurchseType(propertyRequest.getPurchseType());
+
+		return property;
+
+	}
+
+//	this method is to fetch all the property based on the location of the city
+	@Override
+	public ResponseEntity<ResponseStructure<List<PropertyResponse>>> findPropertyByCity(String propertyLocation) {
+		Optional<List<Property>> optionalProperties = propertyRepository.findByPropertyLocation(propertyLocation);
+
+		if (optionalProperties.isPresent() && !optionalProperties.get().isEmpty()) {
+			List<PropertyResponse> propertyResponses = optionalProperties.get().stream()
+					.map(property -> mapToResponse(property)).collect(Collectors.toList());
+
+			ResponseStructure<List<PropertyResponse>> responseStructure = new ResponseStructure<>();
+			responseStructure.setData(propertyResponses);
+			responseStructure.setMessage("Properties found in " + propertyLocation);
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+
+			return ResponseEntity.ok(responseStructure);
+		} else {
+			throw new RuntimeException();
+
+		}
+	}
+
+//	This method is to fetch all the property in our database
+	@Override
+	public ResponseEntity<ResponseStructure<List<PropertyResponse>>> findAllProperty() {
+		List<Property> properties = propertyRepository.findAll();
+
+		List<PropertyResponse> propertiesResponses = properties.stream().map(property -> mapToResponse(property))
+				.collect(Collectors.toList());
+
+		ResponseStructure<List<PropertyResponse>> responseStructure = new ResponseStructure<>();
+		responseStructure.setData(propertiesResponses);
+		responseStructure.setMessage("The numbers of property fetched is " + propertiesResponses.size());
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+
+		return ResponseEntity.ok(responseStructure);
+	}
+}

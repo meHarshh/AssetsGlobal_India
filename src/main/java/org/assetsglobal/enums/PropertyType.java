@@ -1,0 +1,7 @@
+package org.assetsglobal.enums;
+
+
+public enum PropertyType {
+
+	APARTMENT, VILLA, INDEPENDENT_HOUSE, PLOTS, OFFICE_SPACE, COMMERCIAL_PROPERTIES,LAND, FARM_HOUSE, HOLIDAY_HOMES, OTHERS
+}
