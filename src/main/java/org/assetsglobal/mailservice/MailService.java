@@ -1,6 +1,5 @@
 package org.assetsglobal.mailservice;
 
-
 import java.util.Date;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,12 +8,15 @@ import org.springframework.stereotype.Component;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
 
 @Component
-@AllArgsConstructor
 public class MailService {
 	private JavaMailSender javaMailSender;
+
+	public MailService(JavaMailSender javaMailSender) {
+		super();
+		this.javaMailSender = javaMailSender;
+	}
 
 	public void sendMailMessage(MessageModel messageModel) throws MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
