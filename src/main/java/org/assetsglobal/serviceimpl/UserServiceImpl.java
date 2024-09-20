@@ -157,10 +157,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private String generateOTP() {
-//		return String.valueOf(new Random().nextInt(1000, 9999));
-		return "5050";
+		return String.valueOf(new Random().nextInt(1000, 9999));
 	}
-	
 
 	private UserResponse mapToUserResponse(User user) {
 
@@ -178,11 +176,10 @@ public class UserServiceImpl implements UserService {
 		UserRole role = userRequest.getUserRole();
 		User user = null;
 		switch (role) {
-		/*
-		 * case SELLER -> user = new Seller(); case BUYER -> user = new Buyer(); case
-		 * BROCKER -> user = new Brocker(); default -> throw new
-		 * IllegalArgumentException("Invalid Input!!!");
-		 */
+		case SELLER -> user = new Seller();
+		case BUYER -> user = new Buyer();
+		case BROCKER -> user = new Brocker();
+		default -> throw new IllegalArgumentException("Invalid Input!!!");
 		}
 		user.setPhoneNumber(userRequest.getPhoneNumber());
 		user.setUserName(userRequest.getUserName());
