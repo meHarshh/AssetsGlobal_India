@@ -19,9 +19,9 @@
 		user-friendly interface, it caters to diverse asset management needs
 		seamlessly, making it an essential tool for effective management in
 		various sectors.&quot; </description>
-	<properties>
+	<!--<properties>
 		<java.version>21</java.version>
-	</properties>
+	</properties>-->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
