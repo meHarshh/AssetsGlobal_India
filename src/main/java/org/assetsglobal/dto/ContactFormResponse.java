@@ -51,16 +51,6 @@ public class ContactFormResponse {
 		this.mobileNumber = mobileNumber;
 	}
 
-	public ContactFormResponse() {
-	}
-
-	public ContactFormResponse(int contactId, String name, String email, String message, long mobileNumber) {
-		super();
-		this.contactId = contactId;
-		this.name = name;
-		this.email = email;
-		this.message = message;
-		this.mobileNumber = mobileNumber;
-	}
+	
 
 }

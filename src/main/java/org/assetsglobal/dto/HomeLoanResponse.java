@@ -52,16 +52,4 @@ public class HomeLoanResponse {
 		this.bankingPartner = bankingPartner;
 	}
 
-	public HomeLoanResponse(int loadId, String name, String email, long phoneNumber, BankingPartner bankingPartner) {
-		this.loadId = loadId;
-		this.name = name;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.bankingPartner = bankingPartner;
-	}
-
-	public HomeLoanResponse() {
-		// TODO Auto-generated constructor stub
-	}
-
 }
