@@ -11,6 +11,10 @@ public class ContactFormResponse {
 	private String message;
 	private long mobileNumber;
 
+	public ContactFormResponse() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getContactId() {
 		return contactId;
 	}
@@ -50,7 +54,5 @@ public class ContactFormResponse {
 	public void setMobileNumber(long mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
-
-	
 
 }

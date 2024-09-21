@@ -12,6 +12,10 @@ public class HomeLoanResponse {
 	private long phoneNumber;
 	private BankingPartner bankingPartner;
 
+	public HomeLoanResponse() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getLoadId() {
 		return loadId;
 	}
