@@ -80,17 +80,6 @@ public class User {
 		this.isEmailVerified = isEmailVerified;
 	}
 
-	public User(int userId, String userName, String userEmail, long phoneNumber, UserRole userRole,
-			boolean isEmailVerified) {
-		super();
-		this.userId = userId;
-		this.userName = userName;
-		this.userEmail = userEmail;
-		this.phoneNumber = phoneNumber;
-		this.userRole = userRole;
-		this.isEmailVerified = isEmailVerified;
-	}
-
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
